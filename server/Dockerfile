@@ -4,11 +4,11 @@ FROM arm64v8/python:3.9-slim-buster
 WORKDIR /app
 
 # Copy dependencies
-COPY server/requirements.txt ./
+COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 # Copy your server code
-COPY server/ ./
+COPY *.py ./
 
 # Expose the port used by your FastAPI app (e.g., 8000)
 EXPOSE 8000
