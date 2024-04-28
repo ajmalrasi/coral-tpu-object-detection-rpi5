@@ -1,8 +1,8 @@
 import base64
-from server.detection_server import app
 from fastapi.testclient import TestClient
 from PIL import Image
 import io
+from server import app
 
 client = TestClient(app)
 
