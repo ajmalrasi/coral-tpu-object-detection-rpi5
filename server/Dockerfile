@@ -1,16 +1,22 @@
-FROM arm64v8/python:3.9-slim-buster  
+FROM arm64v8/python:3.9-slim-buster
 
-# Working directory
+ARG USER=nonroot
+ARG UID=1000
+
+USER $UID:$UID
 WORKDIR /app
 
-# Copy dependencies
-COPY server/requirements.txt ./
-RUN pip install -r requirements.txt
+COPY --chown=$UID ./requirements.txt ./
 
-# Copy your server code
-COPY server/ ./
+USER root
 
-# Expose the port used by your FastAPI app (e.g., 8000)
+RUN apt-get update && useradd -m -U -u $UID $USER && apt-get install -y libgdal-dev
+
+USER $UID:$UID
+RUN pip install -r requirements.txt --extra-index-url https://google-coral.github.io/py-repo/ pycoral
+
+COPY --chown=$UID *.py ./
+
 EXPOSE 8000
 
 # Command to start the server 
