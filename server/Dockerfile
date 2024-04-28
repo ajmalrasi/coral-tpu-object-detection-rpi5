@@ -19,6 +19,8 @@ COPY --chown=$UID *.py ./
 
 EXPOSE 8000
 
-ENV PYTHONPATH=$PYTHONPATH:/home/$USER/.local/bin
+ENV PATH=$PATH:/home/$USER/.local/bin
+
+RUN export PATH="/home/$USER/.local/bin:$PATH"
 
 CMD ["uvicorn", "detection_server:app", "--host", "0.0.0.0", "--port", "8000"]
