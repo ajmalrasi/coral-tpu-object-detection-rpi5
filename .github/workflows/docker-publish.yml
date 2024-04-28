@@ -20,7 +20,6 @@ env:
   REGISTRY: docker.io
   IMAGE_NAME: edgetpu_server
 
-
 jobs:
   build:
 
