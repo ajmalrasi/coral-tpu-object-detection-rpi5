@@ -2,8 +2,7 @@ import base64
 from fastapi.testclient import TestClient
 from PIL import Image
 import io
-from server.detection_server import app
-
+from server import app
 client = TestClient(app)
 
 def test_successful_predict():
@@ -15,7 +14,6 @@ def test_successful_predict():
     with io.BytesIO() as output:
         image.save(output, format="JPEG")
         image_bytes = output.getvalue()
-
 
     image_data = base64.b64encode(image_bytes).decode('utf-8')
 
