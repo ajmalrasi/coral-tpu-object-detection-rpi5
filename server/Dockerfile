@@ -13,7 +13,7 @@ USER root
 RUN apt-get update && useradd -m -U -u $UID $USER && apt-get install -y libgdal-dev
 
 USER $UID:$UID
-RUN pip install --no-cache-dir -r requirements.txt --extra-index-url https://google-coral.github.io/py-repo/ pycoral
+RUN pip install --no-cache-dir --user -r requirements.txt --extra-index-url https://google-coral.github.io/py-repo/ pycoral
 
 COPY --chown=$UID *.py ./
 
