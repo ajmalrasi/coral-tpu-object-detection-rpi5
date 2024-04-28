@@ -19,7 +19,7 @@ def test_successful_predict():
 
     response = client.post("/predict", json={"image": image_data})
     assert response.status_code == 200
-    assert response.json() == {"message": "Processed Image"}
+    assert response.json() == {"message": "Image received and processed"}
 
 def test_missing_image():
     response = client.post("/predict", json={}) 
