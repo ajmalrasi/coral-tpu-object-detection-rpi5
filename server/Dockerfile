@@ -4,7 +4,7 @@ FROM arm64v8/python:3.9-slim-buster
 WORKDIR /app
 
 # Copy dependencies
-COPY requirements.txt ./
+COPY ./requirements.txt ./
 RUN pip install -r requirements.txt
 
 # Copy your server code
