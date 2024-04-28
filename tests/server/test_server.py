@@ -1,5 +1,5 @@
 import base64
-from server import app
+from server.detection_server import app
 from fastapi.testclient import TestClient
 from PIL import Image
 import io
