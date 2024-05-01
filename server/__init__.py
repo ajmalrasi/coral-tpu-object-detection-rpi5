@@ -1,1 +1,1 @@
-from .detection_server import app
+from .main import app
