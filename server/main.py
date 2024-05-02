@@ -13,7 +13,7 @@ async def process_image(data: dict = Body(...)):
 
     try:
         image_str = data["image"]
-        decoded = base64.b64decode(image_str)
+        decoded_image = base64.b64decode(image_str)
 
         return JSONResponse(content={"message": "Image received and processed"})
     except Exception as e:
