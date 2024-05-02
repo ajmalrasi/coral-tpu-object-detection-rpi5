@@ -14,12 +14,10 @@ while True:
     if not ret:
         print("Error reading frame from webcam")
         break
-
-    # Encode the frame as JPEG
+    
     ret, buffer = cv2.imencode('.jpg', frame)
     jpg_as_text = base64.b64encode(buffer).decode('utf-8')
 
-    # Prepare data for the request
     data = {
         "image": jpg_as_text
     }

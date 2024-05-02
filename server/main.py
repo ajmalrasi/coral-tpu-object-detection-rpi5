@@ -14,7 +14,6 @@ async def process_image(data: dict = Body(...)):
         image_str = data["image"]
         decoded = base64.b64decode(image_str)
 
-        
         return JSONResponse(content={"message": "Image received and processed"})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing image: {str(e)}")
