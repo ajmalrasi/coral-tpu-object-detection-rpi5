@@ -3,6 +3,7 @@ from fastapi import FastAPI, Body, HTTPException
 from fastapi.responses import JSONResponse
 import uvicorn
 
+
 app = FastAPI()
 
 @app.post("/predict")
