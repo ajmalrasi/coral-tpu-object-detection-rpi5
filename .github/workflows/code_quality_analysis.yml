@@ -3,6 +3,8 @@ name: "Code Quality"
 on:
   pull_request:
     branches: [ "main"]
+    paths:
+      - '**/object_detection_tpu/**' 
 
 jobs:
   analyze:
