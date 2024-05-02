@@ -19,5 +19,5 @@ COPY --chown=$UID *.py ./
 
 EXPOSE 8000
 
-CMD ["/home/nonroot/.local/bin/uvicorn", "detection_server:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/home/nonroot/.local/bin/uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 
