@@ -27,9 +27,9 @@ async def process_image(data: dict = Body(...)):
         image_bytes = io.BytesIO(decoded_image)
         image = Image.open(image_bytes)
         if is_raspberry_pi:
+            start = time.perf_counter()
             _, scale = common.set_resized_input(
                 interpreter, image.size, lambda size: image.resize(size, Image.LANCZOS))
-            start = time.perf_counter()
             interpreter.invoke()
             inference_time = time.perf_counter() - start
             objs = detect.get_objects(interpreter, 0.4, scale)

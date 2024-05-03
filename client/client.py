@@ -26,7 +26,19 @@ while True:
     response = requests.post(url, json=data)
 
     if response.status_code == 200:
-        print("Image frame sent successfully")
+        data = response.json()
+        for prediction in data["predictions"]:
+            xmin = prediction["bbox"]["xmin"]
+            ymin = prediction["bbox"]["ymin"]
+            xmax = prediction["bbox"]["xmax"]
+            ymax = prediction["bbox"]["ymax"]
+            label = prediction["label"] 
+            score = prediction["score"]
+            id = prediction["id"]
+            text = f"{label} (ID: {id}) - Score: {score:.2f}"
+
+            cv2.putText(frame, text, (xmin, ymin - 10), cv2.FONT_HERSHEY_SIMPLEX,  0.7, (0, 255, 0), 2)
+            cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
     else:
         print(f"Error sending image: {response.status_code} - {response.text}")
 
