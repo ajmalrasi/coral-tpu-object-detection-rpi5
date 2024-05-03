@@ -26,8 +26,8 @@ ARG UID=1000
 USER root
 RUN useradd -m -U -u $UID $USER
 WORKDIR /app
-COPY --from=build /usr/lib/aarch64-linux-gnu/libcrypto.so.1.1 /usr/lib/aarch64-linux-gnu/
-COPY --from=build /usr/lib/aarch64-linux-gnu/libssl.so.1.1 /usr/lib/aarch64-linux-gnu/
+COPY --from=build /lib/aarch64-linux-gnu/libcrypto.so.1.1 /lib/aarch64-linux-gnu/
+COPY --from=build /lib/aarch64-linux-gnu/libssl.so.1.1 /lib/aarch64-linux-gnu/
 
 USER $UID:$UID
 
