@@ -1,4 +1,4 @@
-FROM arm64v8/python:3.9-slim-bullseye AS build
+FROM arm64v8/python:3.9-slim-bookworm AS build
 
 ARG USER=nonroot
 ARG UID=1000
@@ -18,7 +18,7 @@ USER root
 RUN chmod +x ./install_openssl.sh && ./install_openssl.sh
 
 # Final Stage
-FROM arm64v8/python:3.9-slim-bullseye
+FROM arm64v8/python:3.9-slim-bookworm
 
 ARG USER=nonroot
 ARG UID=1000
