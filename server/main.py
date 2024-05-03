@@ -10,6 +10,8 @@ import platform
 
 app = FastAPI()
 
+print(platform.system())
+print(platform.machine())
 is_raspberry_pi = platform.system() == 'Linux' and platform.machine().startswith('arm')
 if is_raspberry_pi:
     print("Raspberry pi")
