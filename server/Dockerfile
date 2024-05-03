@@ -6,7 +6,7 @@ ARG UID=1000
 USER root
 WORKDIR /app
 
-RUN apt update && useradd -m -U -u $UID $USER && apt-get install -y libgdal-dev
+RUN apt-get update && useradd -m -U -u $UID $USER && apt-get install -y libgdal-dev
 
 COPY --chown=$UID requirements.txt ./  
 
