@@ -3,8 +3,12 @@ from fastapi import FastAPI, Body, HTTPException
 from fastapi.responses import JSONResponse
 import uvicorn
 
+from utils import load_model
+
 
 app = FastAPI()
+
+load_model()
 
 @app.post("/predict")
 async def process_image(data: dict = Body(...)):
