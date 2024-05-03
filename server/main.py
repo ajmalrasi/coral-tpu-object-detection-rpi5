@@ -13,7 +13,7 @@ app = FastAPI()
 is_raspberry_pi = platform.system() == 'Linux' and platform.machine().startswith('aarch64')
 if is_raspberry_pi:
     print("Raspberry pi")
-    from .utils import load_model
+    from utils import load_model
     load_model()
 
 @app.post("/predict")
