@@ -10,9 +10,7 @@ import platform
 
 app = FastAPI()
 
-print(platform.system())
-print(platform.machine())
-is_raspberry_pi = platform.system() == 'Linux' and platform.machine().startswith('arm')
+is_raspberry_pi = platform.system() == 'Linux' and platform.machine().startswith('aarch64')
 if is_raspberry_pi:
     print("Raspberry pi")
     from .utils import load_model
