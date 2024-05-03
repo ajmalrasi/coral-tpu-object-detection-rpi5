@@ -2,19 +2,18 @@ import base64
 from fastapi import FastAPI, Body, HTTPException
 from fastapi.responses import JSONResponse
 from PIL import Image
-from pycoral.adapters import common
-from pycoral.adapters import detect
 import uvicorn
 import io
 import platform
 
-
-app = FastAPI()
-
 is_raspberry_pi = platform.system() == 'Linux' and platform.machine().startswith('aarch64')
 if is_raspberry_pi:
+    from pycoral.adapters import common
+    from pycoral.adapters import detect
     from utils import load_model
     interpreter = load_model()
+
+app = FastAPI()
 
 @app.post("/predict")
 async def process_image(data: dict = Body(...)):

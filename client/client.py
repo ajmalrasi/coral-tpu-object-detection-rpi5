@@ -1,8 +1,6 @@
 import cv2
 import requests
 import base64
-from PIL import Image
-import io
 
 # Server URL (replace with your actual server address and port)
 url = 'http://192.168.3.20:8000/predict'
@@ -20,21 +18,8 @@ while True:
     ret, buffer = cv2.imencode('.jpg', frame)
     jpg_as_text = base64.b64encode(buffer).decode('utf-8')
 
-    # data = {
-    #     "image": jpg_as_text
-    # }
-
-    image_size = (640, 480)
-    color = (255, 0, 0) 
-    image = Image.new('RGB', size=image_size, color=color)
-
-    with io.BytesIO() as output:
-        image.save(output, format="JPEG")
-        image_bytes = output.getvalue()
-    image_data = base64.b64encode(image_bytes).decode('utf-8')
-
     data = {
-        "image": image_data
+        "image": jpg_as_text
     }
 
     # Send the POST request to the server
