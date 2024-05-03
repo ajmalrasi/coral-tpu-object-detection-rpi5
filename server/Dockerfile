@@ -25,11 +25,11 @@ ARG UID=1000
 
 USER root
 RUN useradd -m -U -u $UID $USER
+WORKDIR /app
 COPY --from=build /lib/aarch64-linux-gnu/libcrypto.so.1.1 /lib/aarch64-linux-gnu/
 COPY --from=build /lib/aarch64-linux-gnu/libssl.so.1.1 /lib/aarch64-linux-gnu/
 
 USER $UID:$UID
-WORKDIR /app
 
 COPY --from=build --chown=$UID /app/ /app/
 COPY --from=build --chown=$UID /home/nonroot/.local/ /home/nonroot/.local/
