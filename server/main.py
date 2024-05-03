@@ -48,8 +48,8 @@ async def process_image(data: dict = Body(...)):
                         "ymax": int(obj.bbox.ymax)
                     }
                 })
-            else:
-                response = {"status": "success", "predictions": []}
+        else:
+            response = {"status": "success", "predictions": []}
 
         return JSONResponse(content=response)
     except Exception as e:
