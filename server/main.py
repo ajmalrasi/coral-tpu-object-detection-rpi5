@@ -1,7 +1,7 @@
 import base64
 from fastapi import FastAPI, Body, HTTPException
 from fastapi.responses import JSONResponse
-import os
+from PIL import Image
 
 import uvicorn
 import platform
@@ -11,7 +11,7 @@ app = FastAPI()
 is_raspberry_pi = platform.system() == 'Linux' and platform.machine().startswith('aarch64')
 if is_raspberry_pi:
     from utils import load_model
-    load_model()
+    interpretor = load_model()
 
 @app.post("/predict")
 async def process_image(data: dict = Body(...)):
@@ -21,6 +21,8 @@ async def process_image(data: dict = Body(...)):
     try:
         image_str = data["image"]
         decoded_image = base64.b64decode(image_str)
+        print(decoded_image)
+        image = Image.open(decoded_image)
 
         return JSONResponse(content={"message": "Image received and processed"})
     except Exception as e:
