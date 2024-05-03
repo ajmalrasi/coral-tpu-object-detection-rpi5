@@ -26,9 +26,9 @@ async def process_image(data: dict = Body(...)):
         decoded_image = base64.b64decode(image_str)
         image_bytes = io.BytesIO(decoded_image)
         image = Image.open(image_bytes)
-        print(image)
-        _, scale = common.set_resized_input(
-            interpreter, image.size, lambda size: image.resize(size, Image.LANCZOS))
+        if is_raspberry_pi:
+            _, scale = common.set_resized_input(
+                interpreter, image.size, lambda size: image.resize(size, Image.LANCZOS))
         print(scale)
         return JSONResponse(content={"message": "Image received and processed"})
     except Exception as e:
