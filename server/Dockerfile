@@ -6,7 +6,7 @@ ARG UID=1000
 WORKDIR /app
 
 USER root
-RUN apt-get update && useradd -m -U -u $UID $USER && apt-get install -y --no-install-recommends libgdal-dev wget && \
+RUN apt-get update && useradd -m -U -u $UID $USER && apt-get install -y --no-install-recommends libgdal-dev build-essential wget && \
     rm -rf /var/lib/apt/lists/* 
 
 USER $UID:$UID
