@@ -2,8 +2,6 @@ import base64
 from fastapi import FastAPI, Body, HTTPException
 from fastapi.responses import JSONResponse
 import os
-inf = os.walk('.')
-print([x[0] for x in inf])
 
 import uvicorn
 import platform
@@ -12,7 +10,6 @@ app = FastAPI()
 
 is_raspberry_pi = platform.system() == 'Linux' and platform.machine().startswith('aarch64')
 if is_raspberry_pi:
-    print("Raspberry pi")
     from utils import load_model
     load_model()
 
