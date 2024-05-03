@@ -10,4 +10,4 @@ cd openssl-${OPENSSL_VERSION}
 
 ./config && \
 make && \
-mv libcrypto.so.1.1 libssl.so.1.1 /lib/aarch64-linux-gnu/
+mv libcrypto.so.1.1 libssl.so.1.1 /usr/lib/aarch64-linux-gnu/
