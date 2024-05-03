@@ -1,20 +1,19 @@
-FROM arm64v8/python:3.9-alpine AS build
+FROM arm64v8/python:3.9-slim-buster AS build
 
 ARG USER=nonroot
 ARG UID=1000
 
-USER root
 WORKDIR /app
 
+USER root
 RUN apt-get update && useradd -m -U -u $UID $USER && apt-get install -y libgdal-dev
 
-COPY --chown=$UID requirements.txt ./  
-
 USER $UID:$UID
+COPY --chown=$UID requirements.txt ./
 RUN pip install --no-cache-dir --user -r requirements.txt --extra-index-url https://google-coral.github.io/py-repo/ pycoral
 
 # Final Stage
-FROM arm64v8/python:3.9-alpine
+FROM arm64v8/python:3.9-slim-buster
 
 ARG USER=nonroot
 ARG UID=1000
