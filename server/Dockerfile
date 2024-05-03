@@ -26,7 +26,10 @@ ARG UID=1000
 USER root
 RUN useradd -m -U -u $UID $USER
 WORKDIR /app
+
+RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | tee /etc/apt/sources.list.d/coral-edgetpu.list
 RUN apt-get -y --no-install-recommends install libedgetpu1-std
+
 COPY --from=build /lib/aarch64-linux-gnu/libcrypto.so.1.1 /lib/aarch64-linux-gnu/
 COPY --from=build /lib/aarch64-linux-gnu/libssl.so.1.1 /lib/aarch64-linux-gnu/
 
