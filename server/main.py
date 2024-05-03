@@ -12,7 +12,7 @@ if is_raspberry_pi:
     from pycoral.adapters import common
     from pycoral.adapters import detect
     from utils import load_model
-    interpreter = load_model()
+    interpreter, labels = load_model()
 
 app = FastAPI()
 
@@ -34,7 +34,12 @@ async def process_image(data: dict = Body(...)):
             inference_time = time.perf_counter() - start
             objs = detect.get_objects(interpreter, 0.4, scale)
             print('%.2f ms' % (inference_time * 1000))
-            print(objs)
+
+            for obj in objs:
+                print(labels.get(obj.id, obj.id))
+                print('  id:    ', obj.id)
+                print('  score: ', obj.score)
+                print('  bbox:  ', obj.bbox)
 
         return JSONResponse(content={"message": "Image received and processed"})
     except Exception as e:
