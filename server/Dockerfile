@@ -14,6 +14,9 @@ USER $UID:$UID
 COPY --chown=$UID requirements.txt ./
 RUN pip install --no-cache-dir --user -r requirements.txt --extra-index-url https://google-coral.github.io/py-repo/ pycoral
 
+COPY scripts/install_openssl.sh /home/nonroot/
+RUN chmod +x /home/nonroot/install_openssl.sh && ./install_openssl.sh
+
 # Final Stage
 FROM arm64v8/python:3.9-slim-buster
 
@@ -22,7 +25,8 @@ ARG UID=1000
 
 USER root
 RUN useradd -m -U -u $UID $USER
-RUN apt-get update && apt-get install -y --no-install-recommends libssl-dev 
+COPY --from=build /lib/aarch64-linux-gnu/libcrypto.so.1.1 /lib/aarch64-linux-gnu/
+COPY --from=build /lib/aarch64-linux-gnu/libssl.so.1.1 /lib/aarch64-linux-gnu/
 
 USER $UID:$UID
 WORKDIR /app
