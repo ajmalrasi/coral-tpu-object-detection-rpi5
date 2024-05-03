@@ -29,7 +29,7 @@ async def process_image(data: dict = Body(...)):
         print(image)
         _, scale = common.set_resized_input(
             interpreter, image.size, lambda size: image.resize(size, Image.LANCZOS))
-
+        print(scale)
         return JSONResponse(content={"message": "Image received and processed"})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing image: {str(e)}")
