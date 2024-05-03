@@ -2,12 +2,14 @@ import base64
 from fastapi import FastAPI, Body, HTTPException
 from fastapi.responses import JSONResponse
 import uvicorn
-
-from .utils import load_model
+import platform
 
 app = FastAPI()
 
-load_model()
+is_raspberry_pi = platform.system() == 'Linux' and platform.machine().startswith('arm')
+if is_raspberry_pi:
+    from .utils import load_model
+    load_model()
 
 @app.post("/predict")
 async def process_image(data: dict = Body(...)):
