@@ -5,7 +5,6 @@ import uvicorn
 
 from .utils import load_model
 
-
 app = FastAPI()
 
 load_model()
