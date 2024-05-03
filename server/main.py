@@ -34,14 +34,24 @@ async def process_image(data: dict = Body(...)):
             inference_time = time.perf_counter() - start
             objs = detect.get_objects(interpreter, 0.4, scale)
             print('%.2f ms' % (inference_time * 1000))
-
+            response = {"status": "success", "predictions": []}
             for obj in objs:
-                print(labels.get(obj.id, obj.id))
-                print('  id:    ', obj.id)
-                print('  score: ', obj.score)
-                print('  bbox:  ', obj.bbox)
+                label = labels.get(obj.id, obj.id)
+                response["predictions"].append({
+                    "label": label,
+                    "id": obj.id,
+                    "score": obj.score,
+                    "bbox": {
+                        "xmin": int(obj.bbox.xmin),
+                        "ymin": int(obj.bbox.ymin),
+                        "xmax": int(obj.bbox.xmax),
+                        "ymax": int(obj.bbox.ymax)
+                    }
+                })
+            else:
+                response = {"status": "success", "predictions": []}
 
-        return JSONResponse(content={"message": "Image received and processed"})
+        return JSONResponse(content=response)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing image: {str(e)}")
 

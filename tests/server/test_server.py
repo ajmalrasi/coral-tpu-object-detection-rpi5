@@ -18,7 +18,7 @@ def test_successful_predict():
     image_data = base64.b64encode(image_bytes).decode('utf-8')
     response = client.post("/predict", json={"image": image_data})
     assert response.status_code == 200
-    assert response.json() == {"message": "Image received and processed"}
+    assert response.json() == {"status": "success", "predictions": []}
 
 def test_missing_image():
     response = client.post("/predict", json={}) 

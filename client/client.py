@@ -33,7 +33,7 @@ while True:
     # Show the frame (optional, for debugging)
     cv2.imshow('Webcam', frame)
     cv2.namedWindow('Webcam', cv2.WINDOW_NORMAL)
-    break
+    # break
     # Exit on 'q' key press
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
