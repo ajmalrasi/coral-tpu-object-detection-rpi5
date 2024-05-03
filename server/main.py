@@ -6,6 +6,8 @@ from pycoral.adapters import common
 from pycoral.adapters import detect
 import uvicorn
 import io
+import platform
+
 
 app = FastAPI()
 
@@ -24,7 +26,7 @@ async def process_image(data: dict = Body(...)):
         decoded_image = base64.b64decode(image_str)
         image_bytes = io.BytesIO(decoded_image)
         image = Image.open(image_bytes)
-        print(decoded_image)
+        print(image)
         _, scale = common.set_resized_input(
             interpreter, image.size, lambda size: image.resize(size, Image.LANCZOS))
 
