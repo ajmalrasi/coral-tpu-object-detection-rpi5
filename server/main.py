@@ -2,16 +2,17 @@ import base64
 from fastapi import FastAPI, Body, HTTPException
 from fastapi.responses import JSONResponse
 from PIL import Image
-
+from pycoral.adapters import common
+from pycoral.adapters import detect
 import uvicorn
-import platform
+import io
 
 app = FastAPI()
 
 is_raspberry_pi = platform.system() == 'Linux' and platform.machine().startswith('aarch64')
 if is_raspberry_pi:
     from utils import load_model
-    interpretor = load_model()
+    interpreter = load_model()
 
 @app.post("/predict")
 async def process_image(data: dict = Body(...)):
@@ -21,8 +22,11 @@ async def process_image(data: dict = Body(...)):
     try:
         image_str = data["image"]
         decoded_image = base64.b64decode(image_str)
+        image_bytes = io.BytesIO(decoded_image)
+        image = Image.open(image_bytes)
         print(decoded_image)
-        image = Image.open(decoded_image)
+        _, scale = common.set_resized_input(
+            interpreter, image.size, lambda size: image.resize(size, Image.LANCZOS))
 
         return JSONResponse(content={"message": "Image received and processed"})
     except Exception as e:
