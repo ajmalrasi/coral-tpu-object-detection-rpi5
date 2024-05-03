@@ -6,7 +6,7 @@ ARG UID=1000
 WORKDIR /app
 
 USER root
-RUN apt-get update && useradd -m -U -u $UID $USER && apt-get install -y --no-install-recommends libgdal-dev build-essential wget && \
+RUN apt-get update && useradd -m -U -u $UID $USER && apt-get install -y --no-install-recommends libgdal-dev build-essential wget curl gnupg && \
     rm -rf /var/lib/apt/lists/* 
 
 USER $UID:$UID
@@ -28,6 +28,7 @@ RUN useradd -m -U -u $UID $USER
 WORKDIR /app
 
 RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | tee /etc/apt/sources.list.d/coral-edgetpu.list
+RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 RUN apt-get -y --no-install-recommends install libedgetpu1-std
 
 COPY --from=build /lib/aarch64-linux-gnu/libcrypto.so.1.1 /lib/aarch64-linux-gnu/
