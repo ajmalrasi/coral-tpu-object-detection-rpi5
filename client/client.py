@@ -3,7 +3,7 @@ import requests
 import base64
 
 # Server URL (replace with your actual server address and port)
-url = 'http://127.0.0.1:8000/predict'
+urpythl = 'http://192.168.3.20:8000/predict'
 
 # Initialize video capture from webcam
 cap = cv2.VideoCapture(0)  # 0 usually refers to the default webcam
@@ -33,7 +33,7 @@ while True:
     # Show the frame (optional, for debugging)
     cv2.imshow('Webcam', frame)
     cv2.namedWindow('Webcam', cv2.WINDOW_NORMAL)
-
+    break
     # Exit on 'q' key press
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
