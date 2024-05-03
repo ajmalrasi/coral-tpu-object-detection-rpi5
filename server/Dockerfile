@@ -22,7 +22,7 @@ USER $UID:$UID
 WORKDIR /app
 
 COPY --from=build --chown=$UID /app/ /app/
-COPY --from=build --chown=$UID /home/nonroot/.local /home/nonroot/.local
+COPY --from=build --chown=$UID /home/nonroot/.local/ /home/nonroot/.local/
 COPY --chown=$UID *.py ./
 COPY --chown=$UID ./models/* models/
 
