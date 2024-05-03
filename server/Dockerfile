@@ -6,10 +6,12 @@ ARG UID=1000
 USER root
 WORKDIR /app
 
+RUN apt update && useradd -m -U -u $UID $USER && apt-get install -y libgdal-dev
+
 COPY --chown=$UID requirements.txt ./  
-RUN apk add --no-cache --update build-base libgdal-dev \ 
-    && useradd -m -U -u $UID $USER \
-    && pip install --no-cache-dir -r requirements.txt --extra-index-url https://google-coral.github.io/py-repo/ pycoral
+
+USER $UID:$UID
+RUN pip install --no-cache-dir --user -r requirements.txt --extra-index-url https://google-coral.github.io/py-repo/ pycoral
 
 # Final Stage
 FROM arm64v8/python:3.9-alpine
