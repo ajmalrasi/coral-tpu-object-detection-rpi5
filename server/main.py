@@ -5,6 +5,7 @@ from PIL import Image
 import uvicorn
 import io
 import platform
+import time
 
 is_raspberry_pi = platform.system() == 'Linux' and platform.machine().startswith('aarch64')
 if is_raspberry_pi:
@@ -28,7 +29,14 @@ async def process_image(data: dict = Body(...)):
         if is_raspberry_pi:
             _, scale = common.set_resized_input(
                 interpreter, image.size, lambda size: image.resize(size, Image.LANCZOS))
-        print("")
+            
+        start = time.perf_counter()
+        interpreter.invoke()
+        inference_time = time.perf_counter() - start
+        objs = detect.get_objects(interpreter, 0.4, scale)
+        print('%.2f ms' % (inference_time * 1000))
+        print(objs)
+
         return JSONResponse(content={"message": "Image received and processed"})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing image: {str(e)}")
