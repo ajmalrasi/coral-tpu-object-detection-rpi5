@@ -13,10 +13,11 @@ This project allows you to perform real-time object detection on the Coral Edge 
 - Raspberry Pi 5 with Coral Edge TPU M.2 attached to PCie
 - Compatible Operating System:
   - Debian GNU/Linux 12 (bookworm) 64 bit
-- Linux kernel 6.6.20+rpt-rpi-v8. Check with uname -r.
+- Linux kernel 6.6.20+rpt-rpi-v8. Check with `uname -r`.
 - Python 3.9.16
 
 ### Required Python packages
+
 - tflite-runtime 2.0.0
 - PyCoral 2.5.0
 
