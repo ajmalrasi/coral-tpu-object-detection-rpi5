@@ -2,9 +2,10 @@ import cv2
 import requests
 import base64
 from utils import resize_with_padding
+import time
+
 
 url = 'http://192.168.3.20:8000/predict'
-
 
 cap = cv2.VideoCapture(0)
 
@@ -14,6 +15,8 @@ while True:
     if not ret:
         print("Error reading frame from webcam")
         break
+    start = time.perf_counter()
+
     frame = resize_with_padding(frame, desired_size=300)
     ret, buffer = cv2.imencode('.jpg', frame)
     jpg_as_text = base64.b64encode(buffer).decode('utf-8')
@@ -35,14 +38,15 @@ while True:
             score = prediction["score"]
             id = prediction["id"]
             text = f"{label} (ID: {id}) - Score: {score:.2f}"
-
-            cv2.putText(frame, text, (xmin, ymin - 10), cv2.FONT_HERSHEY_SIMPLEX,  0.7, (0, 255, 0), 2)
-            cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
+            cv2.putText(frame, text, (xmin, ymin - 10), cv2.FONT_HERSHEY_SIMPLEX,  0.6, (0, 255, 0), 2)
+            cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 1)
     else:
         print(f"Error sending image: {response.status_code} - {response.text}")
-
-    cv2.imshow('Webcam', frame)
+    inference_time = time.perf_counter() - start
+    print('%.2f ms' % (inference_time * 1000))
     cv2.namedWindow('Webcam', cv2.WINDOW_NORMAL)
+    cv2.imshow('Webcam', frame)
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 

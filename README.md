@@ -1,40 +1,49 @@
-# Object Detection on Coral Edge TPU with FastAPI
+#  Real-Time Object Detection on Raspberry Pi 5 with Coral Edge TPU
 
-This project allows you to perform real-time object detection on the Coral Edge TPU using a FastAPI server. You can send images to the server, and it will return a list of detected objects along with their bounding boxes, scores, and labels.
+This project enables real-time object detection on the Coral Edge TPU integrated with a Raspberry Pi 5. With the FastAPI server, you can easily send images and receive a list of detected objects accompanied by bounding boxes, confidence scores, and labels.
 
 ## Key Features
 
-- Fast and efficient object detection on the Edge TPU
-- Easy-to-use API for image submission and result retrieval
-- Example usage and visualization code
+ - Fast and efficient object detection: Leverages the Coral Edge TPU for hardware-accelerated machine learning.
+ - Easy-to-use API: Simple image submission and result retrieval.
+ - Example usage and visualization: Provides clear examples for using and understanding the results.
 
 ## Prerequisites
 
-- A Coral Edge TPU device (USB Accelerator or Dev Board)
+- Raspberry Pi 5 with Coral Edge TPU M.2 attached to PCIe slot.
 - Compatible Operating System:
-  - Raspberry Pi OS (for Raspberry Pi with the Edge TPU)
-  - A Linux system with the Edge TPU runtime installed (for other compatible boards or accelerator)
-- Python 3
-- Required libraries: `Bash`, `pip install fastapi uvicorn pillow pycoral`
+  - Debian GNU/Linux 12 (bookworm) 64 bit
+- Linux kernel 6.6.20+rpt-rpi-v8. Check with `uname -r`.
+- Python 3.9.16
+- Linux PCIe Driver for Coral Edge TPU M.2 [documentation](https://coral.ai/docs/notes/build-coral/)
 
-**Use code with caution.**
+### Requirements
 
-**Note:** You'll also need to have the TensorFlow Lite runtime and Edge TPU compatible object detection model. See "Setup" below for instructions.
+To install Docker, follow the instructions in the [official Docker documentation](https://docs.docker.com/engine/install/debian/#install-using-the-repository).
 
-## Setup
 
-1. Install the Edge TPU libraries: Follow the official Coral setup instructions for your device: [Coral Setup](https://coral.ai/docs/setup/)
-2. Obtain a compatible object detection model: Download or train a TensorFlow Lite model that has been quantized for the Edge TPU. See available models here: [Available Models](https://coral.ai/models/)
-3. Place the model file (e.g., model.tflite) in your project directory
+```bash
+sudo apt install devscripts debhelper dkms -y
 
-**Modifications to server.py**
+echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | sudo tee /etc/apt/sources.list.d/coral-edgetpu.list
 
-- Update the `load_model` function in `server.py` to load your specific Edge TPU compatible TensorFlow Lite model.
-- Update the `labels` variable to correspond to the labels of your model.
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+
+sudo apt-get update
+```
+Install libedgetpu
+```bash
+sudo apt-get install libedgetpu1-std
+```
 
 ## Running the Server
 
 Start the FastAPI server:
 
 ```bash
-uvicorn server:app --reload
+docker pull ghcr.io/ajmalrasi/object_detection_tpu:main
+```
+
+```bash
+docker run --device=/dev/apex_0:/dev/apex_0 -v /usr/lib/aarch64-linux-gnu:/usr/lib/aarch64-linux-gnu:ro -p 8000:8000 -it <image>
+```

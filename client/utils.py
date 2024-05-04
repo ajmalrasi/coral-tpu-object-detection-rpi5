@@ -4,11 +4,10 @@ import cv2
 def resize_with_padding(img, desired_size=300):
     h, w = img.shape[:2]
     aspect_ratio = w / h
-
-    if h >= w:  # Taller than wide
+    if h >= w:
         new_h = desired_size
         new_w = int(new_h * aspect_ratio)
-    else:  # Wider than tall
+    else:
         new_w = desired_size
         new_h = int(new_w / aspect_ratio)
 
