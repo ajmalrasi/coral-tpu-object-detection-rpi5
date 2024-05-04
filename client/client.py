@@ -1,6 +1,7 @@
 import cv2
 import requests
 import base64
+from utils import resize_with_padding
 
 url = 'http://192.168.3.20:8000/predict'
 
@@ -13,7 +14,7 @@ while True:
     if not ret:
         print("Error reading frame from webcam")
         break
-    
+    frame = resize_with_padding(frame, desired_size=300)
     ret, buffer = cv2.imencode('.jpg', frame)
     jpg_as_text = base64.b64encode(buffer).decode('utf-8')
 
