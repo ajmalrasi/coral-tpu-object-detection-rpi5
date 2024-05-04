@@ -16,6 +16,7 @@ while True:
         print("Error reading frame from webcam")
         break
     start = time.perf_counter()
+
     frame = resize_with_padding(frame, desired_size=300)
     ret, buffer = cv2.imencode('.jpg', frame)
     jpg_as_text = base64.b64encode(buffer).decode('utf-8')
@@ -37,7 +38,6 @@ while True:
             score = prediction["score"]
             id = prediction["id"]
             text = f"{label} (ID: {id}) - Score: {score:.2f}"
-
             cv2.putText(frame, text, (xmin, ymin - 10), cv2.FONT_HERSHEY_SIMPLEX,  0.6, (0, 255, 0), 2)
             cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 1)
     else:
@@ -46,6 +46,7 @@ while True:
     print('%.2f ms' % (inference_time * 1000))
     cv2.namedWindow('Webcam', cv2.WINDOW_NORMAL)
     cv2.imshow('Webcam', frame)
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
