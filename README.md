@@ -1,4 +1,4 @@
-# Object Detection on Coral Edge TPU with FastAPI
+# Object Detection on Coral Edge TPU with PyCoral
 
 This project allows you to perform real-time object detection on the Coral Edge TPU using a FastAPI server. You can send images to the server, and it will return a list of detected objects along with their bounding boxes, scores, and labels.
 
@@ -10,31 +10,20 @@ This project allows you to perform real-time object detection on the Coral Edge 
 
 ## Prerequisites
 
-- A Coral Edge TPU device (USB Accelerator or Dev Board)
+- Raspberry Pi 5 with Coral Edge TPU M.2 attached to PCie
 - Compatible Operating System:
-  - Raspberry Pi OS (for Raspberry Pi with the Edge TPU)
-  - A Linux system with the Edge TPU runtime installed (for other compatible boards or accelerator)
-- Python 3
-- Required libraries: `Bash`, `pip install fastapi uvicorn pillow pycoral`
+  - Debian GNU/Linux 12 (bookworm) 64 bit
+- Linux kernel 6.6.20+rpt-rpi-v8. Check with uname -r.
+- Python 3.9.16
 
-**Use code with caution.**
+### Required Python packages
+- tflite-runtime 2.0.0
+- PyCoral 2.5.0
 
-**Note:** You'll also need to have the TensorFlow Lite runtime and Edge TPU compatible object detection model. See "Setup" below for instructions.
-
-## Setup
-
-1. Install the Edge TPU libraries: Follow the official Coral setup instructions for your device: [Coral Setup](https://coral.ai/docs/setup/)
-2. Obtain a compatible object detection model: Download or train a TensorFlow Lite model that has been quantized for the Edge TPU. See available models here: [Available Models](https://coral.ai/models/)
-3. Place the model file (e.g., model.tflite) in your project directory
-
-**Modifications to server.py**
-
-- Update the `load_model` function in `server.py` to load your specific Edge TPU compatible TensorFlow Lite model.
-- Update the `labels` variable to correspond to the labels of your model.
 
 ## Running the Server
 
 Start the FastAPI server:
 
 ```bash
-uvicorn server:app --reload
+docker run --device=/dev/apex_0:/dev/apex_0 -v /usr/lib/aarch64-linux-gnu:/usr/lib/aarch64-linux-gnu:ro -p 8000:8000 -it <image>
