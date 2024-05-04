@@ -19,6 +19,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Disable default CodeQL analysis
+      uses: github/codeql-action/autobuild@v3
+
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
 
