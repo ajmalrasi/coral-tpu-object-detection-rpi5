@@ -7,7 +7,7 @@ client = TestClient(app)
 
 def test_successful_predict():
 
-    image_size = (100, 100)
+    image_size = (640, 480)
     color = (255, 0, 0) 
     image = Image.new('RGB', size=image_size, color=color)
 
@@ -16,10 +16,9 @@ def test_successful_predict():
         image_bytes = output.getvalue()
 
     image_data = base64.b64encode(image_bytes).decode('utf-8')
-
     response = client.post("/predict", json={"image": image_data})
     assert response.status_code == 200
-    assert response.json() == {"message": "Image received and processed"}
+    assert response.json() == {"status": "success", "predictions": []}
 
 def test_missing_image():
     response = client.post("/predict", json={}) 
