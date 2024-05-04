@@ -38,7 +38,7 @@ sudo apt-get install libedgetpu1-std
 
 ## Running the Server
 
-Start the FastAPI server:
+Pull Docker Image and start the FastAPI server:
 
 ```bash
 docker pull ghcr.io/ajmalrasi/object_detection_tpu:main
@@ -46,4 +46,14 @@ docker pull ghcr.io/ajmalrasi/object_detection_tpu:main
 
 ```bash
 docker run --device=/dev/apex_0:/dev/apex_0 -v /usr/lib/aarch64-linux-gnu:/usr/lib/aarch64-linux-gnu:ro -p 8000:8000 -it <image>
+```
+## Running the Client
+
+### Install Requiremnets
+```bash
+pip install -r requirements.txt
+```
+### Edit the Camera Index and Run Script
+```bash
+python3 client.py
 ```
