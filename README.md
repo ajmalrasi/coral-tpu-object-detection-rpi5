@@ -15,9 +15,12 @@ This project enables real-time object detection on the Coral Edge TPU integrated
   - Debian GNU/Linux 12 (bookworm) 64 bit
 - Linux kernel 6.6.20+rpt-rpi-v8. Check with `uname -r`.
 - Python 3.9.16
-- Linux Driver for Coral Edge TPU M.2
+- Linux PCIe Driver for Coral Edge TPU M.2 [documentation](https://coral.ai/docs/notes/build-coral/)
 
-### Required Libraries
+### Requirements
+
+To install Docker, follow the instructions in the [official Docker documentation](https://docs.docker.com/engine/install/debian/#install-using-the-repository).
+
 
 ```bash
 sudo apt install devscripts debhelper dkms -y
@@ -27,7 +30,9 @@ echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | sud
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 
 sudo apt-get update
-
+```
+Install libedgetpu
+```bash
 sudo apt-get install libedgetpu1-std
 ```
 
@@ -35,5 +40,10 @@ sudo apt-get install libedgetpu1-std
 
 Start the FastAPI server:
 
+```bash
+docker pull ghcr.io/ajmalrasi/object_detection_tpu:main
+```
 
+```bash
 docker run --device=/dev/apex_0:/dev/apex_0 -v /usr/lib/aarch64-linux-gnu:/usr/lib/aarch64-linux-gnu:ro -p 8000:8000 -it <image>
+```
