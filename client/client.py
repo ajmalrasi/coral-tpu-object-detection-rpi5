@@ -17,7 +17,7 @@ while True:
         break
     start = time.perf_counter()
 
-    frame = resize_with_padding(frame, desired_size=300)
+    frame = resize_with_padding(frame, desired_size=320)
     ret, buffer = cv2.imencode('.jpg', frame)
     jpg_as_text = base64.b64encode(buffer).decode('utf-8')
 
