@@ -67,10 +67,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: 'Init Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
+      - name: Google Cloud Login
+        uses: 'google-github-actions/auth@v2'
         with:
-          credentials_json: ${{ secrets.GCP_MLOPS_SECRETS }}
+          project_id: 'mlops-422314'
+          workload_identity_provider: 'projects/691548117831/locations/global/workloadIdentityPools/github/providers/mlops-github'
 
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
@@ -85,9 +86,6 @@ jobs:
         uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: Google Cloud Login
-        run: gcloud auth login 
 
       - name: Copy files from GCP bucket
         run: |
