@@ -11,15 +11,7 @@ is_raspberry_pi = platform.system() == 'Linux' and platform.machine().startswith
 if is_raspberry_pi:
     from pycoral.adapters import common
     from pycoral.adapters import detect
-    from utils import load_model, download_blobs
-
-    bucket_name = "ar-mlops-artifacts"
-    source_blob_names = [
-        "models/dev/model.tflite", 
-        "labels/dev/labels.txt", 
-    ]
-    destination_directory = "./server/artifacts/" 
-    download_blobs(bucket_name, source_blob_names, destination_directory)
+    from utils import load_model
 
     interpreter, labels = load_model()
 
