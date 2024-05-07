@@ -67,16 +67,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: 'Authenticate to Google Cloud'
+      - name: 'Init Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: ${{ secrets.GCP_MLOPS_SECRETS }}
 
-      - name: Copy files from GCP bucket
+      - name: 'Authenticate to Google Cloud'
         run: |
-          gsutil cp gs://ar-mlops-artifacts/models/dev/model.tflite .
-          gsutil ls gs://ar-mlops-artifacts/labels/dev/labels.txt .
-          ls
+          gcloud auth activate-service-account ${{ secrets.GCP_MLOPS_SECRETS }}
 
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
@@ -91,6 +89,12 @@ jobs:
         uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Copy files from GCP bucket
+        run: |
+          gsutil cp gs://ar-mlops-artifacts/models/dev/model.tflite .
+          gsutil ls gs://ar-mlops-artifacts/labels/dev/labels.txt .
+          ls
 
       - name: Build and push Docker image
         id: build-and-push
