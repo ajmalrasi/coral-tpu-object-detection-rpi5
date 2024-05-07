@@ -7,6 +7,7 @@ import io
 import platform
 import time
 
+
 is_raspberry_pi = platform.system() == 'Linux' and platform.machine().startswith('aarch64')
 if is_raspberry_pi:
     from pycoral.adapters import common
