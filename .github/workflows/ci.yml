@@ -67,11 +67,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Google Cloud Login
-        uses: 'google-github-actions/auth@v2'
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0.4.0'
         with:
-          project_id: 'mlops-422314'
-          workload_identity_provider: 'projects/691548117831/locations/global/workloadIdentityPools/github/providers/mlops-github'
+          project_id: '${{ vars.GCP_PROJECT }}'
+          workload_identity_provider: '${{ vars.WORKLOAD_IDENTITY_PROVIDER }}'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Set credentials file
+        run: >-
+          gcloud auth login
+          --cred-file=${{steps.auth.outputs.credentials_file_path}}
 
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
