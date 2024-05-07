@@ -86,8 +86,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Print authenticated account
-        run: gcloud auth list 
+      - name: Google Cloud Login
+        run: gcloud auth login 
 
       - name: Copy files from GCP bucket
         run: |
