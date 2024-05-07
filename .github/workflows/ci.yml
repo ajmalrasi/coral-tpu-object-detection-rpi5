@@ -67,6 +67,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          service_account: '${{ vars.SERVICE_ACCOUNT }}'
+          workload_identity_provider: '${{ vars.WORKLOAD_IDENTITY_PROVIDER }}'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
@@ -80,6 +90,13 @@ jobs:
         uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Copy files from GCP bucket
+        run: |
+          mkdir artifacts
+          gsutil cp gs://ar-mlops-artifacts/models/dev/model.tflite artifacts/
+          gsutil cp gs://ar-mlops-artifacts/labels/dev/labels.txt artifacts/
+        working-directory: ${{ github.workspace }}/server 
 
       - name: Build and push Docker image
         id: build-and-push
