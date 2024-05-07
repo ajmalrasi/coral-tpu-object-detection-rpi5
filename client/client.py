@@ -7,7 +7,7 @@ import time
 
 url = 'http://192.168.3.20:8000/predict'
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)
 
 while True:
     ret, frame = cap.read()
