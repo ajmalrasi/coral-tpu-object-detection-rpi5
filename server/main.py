@@ -12,9 +12,11 @@ is_raspberry_pi = platform.system() == 'Linux' and platform.machine().startswith
 if is_raspberry_pi:
     from pycoral.adapters import common
     from pycoral.adapters import detect
-    from utils import load_model
+    from utils import init_model, read_yaml, detection, set_inputs
 
-    interpreter, labels = load_model()
+    interpreter, labels = init_model()
+    config = read_yaml()
+    
 
 app = FastAPI()
 
@@ -30,11 +32,22 @@ async def process_image(data: dict = Body(...)):
         image = Image.open(image_bytes)
         if is_raspberry_pi:
             start = time.perf_counter()
-            _, scale = common.set_resized_input(interpreter, image.size, lambda size: image.resize(size, Image.LANCZOS))
-            interpreter.invoke()
-            inference_time = time.perf_counter() - start
-            objs = detect.get_objects(interpreter, 0.4, scale)
-            print('%.2f ms' % (inference_time * 1000))
+            # Remove this
+            image, scale = common.set_resized_input(interpreter, image.size, lambda size: image.resize(size, Image.LANCZOS))
+            if config["model"]["type"] == "SSD":
+
+                interpreter.invoke()
+                inference_time = time.perf_counter() - start
+                objs = detect.get_objects(interpreter, 0.4, scale)
+                print('%.2f ms' % (inference_time * 1000))
+
+            elif config["model"]["type"] == "YOLO":
+
+                scaled_tensor = set_inputs(image)
+                interpreter.set_tensor(config['input']['tensor_id'], scaled_tensor)
+                interpreter.invoke()
+                objs = detection(interpreter)
+            
             response = {"status": "success", "predictions": []}
             for obj in objs:
                 label = labels.get(obj.id, obj.id)
