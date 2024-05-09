@@ -9,18 +9,23 @@ url = 'http://192.168.3.20:8000/predict'
 
 cap = cv2.VideoCapture("cam1.mkv")
 
+reshape = 300
+
 while True:
     ret, frame = cap.read()
 
-    frame = cv2.imread("/home/affine/Projects/sample_data/2015-12-10_1012.jpg")
+    # frame = cv2.imread("/home/affine/Projects/sample_data/2012-12-12_13_55_09.jpg")
 
     if not ret:
         print("Error reading frame from webcam")
         break
     start = time.perf_counter()
 
-    frame = resize_with_padding(frame, desired_size=640)
-    ret, buffer = cv2.imencode('.jpg', frame)
+    h, w, c = frame.shape
+
+    frame_resized = resize_with_padding(frame, desired_size=reshape)
+
+    ret, buffer = cv2.imencode('.jpg', frame_resized)
     jpg_as_text = base64.b64encode(buffer).decode('utf-8')
 
     data = {
@@ -37,18 +42,25 @@ while True:
         data = response.json()
         for prediction in data["predictions"]:
             xmin = prediction["bbox"]["xmin"]
-            ymin = prediction["bbox"]["ymin"]
+            ymin = prediction["bbox"]["ymin"] 
             xmax = prediction["bbox"]["xmax"]
             ymax = prediction["bbox"]["ymax"]
             label = prediction["label"] 
             score = prediction["score"]
             id = prediction["id"]
+
+            xmin = int(xmin * (w / reshape))
+            orig = ((reshape / w) * h)
+            rem = (reshape - orig) // 2
+            ymin = int( (ymin - rem) * (h / orig) )
+            xmax = int(xmax * (w / reshape))
+            ymax = int( (ymax  - rem) * (h / orig) )
+
             text = f"{label}, {score:.2f}"
             cv2.rectangle(frame, (xmin, ymin), ( xmin + len(text) * 8, 
                             ymin - 10) , (0, 255, 0), -1, cv2.LINE_AA)
-            cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 1)
+            cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
             cv2.putText(frame, text, (xmin, ymin), cv2.FONT_HERSHEY_COMPLEX,  0.4, (0, 0, 0), 1, cv2.LINE_AA)
-            
     else:
         print(f"Error sending image: {response.status_code} - {response.text}")
     inference_time = time.perf_counter() - start
