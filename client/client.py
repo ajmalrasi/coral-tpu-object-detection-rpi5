@@ -7,7 +7,7 @@ import time
 
 url = 'http://192.168.3.20:8000/predict'
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)
 
 while True:
     ret, frame = cap.read()
@@ -50,6 +50,7 @@ while True:
         print(f"Error sending image: {response.status_code} - {response.text}")
     inference_time = time.perf_counter() - start
     print('%.2f ms' % (inference_time * 1000))
+
     cv2.namedWindow('Webcam', cv2.WINDOW_NORMAL)
     cv2.imshow('Webcam', frame)
 
