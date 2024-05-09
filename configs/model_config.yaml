@@ -1,0 +1,27 @@
+
+model:
+  path: artifacts/yolov8.tflite
+  type: 'YOLO'
+
+input:
+  shape: [1, 640, 640, 3]
+  preprocessing:
+    normalization: [-128, 127] 
+    dtype: uint8
+  tensor_id: 0
+
+output:
+  label_file_path: artifacts/yolo.txt
+  tensor_id: [47]
+  postprocessing:
+    confidence_threshold: 0.6
+    iou_threshold: 0.5
+    top_k: 0.5
+    dtype: uint8
+    quantization:
+      scales: 0.003986024297773838
+      zero_point: -128
+      type: float32
+
+metrics:
+   accuracy_threshold: 0.80

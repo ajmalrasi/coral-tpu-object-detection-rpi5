@@ -6,9 +6,8 @@ ARG UID=1000
 USER $UID:$UID
 WORKDIR /app
 
-COPY --chown=$UID ./requirements.txt ./
+COPY --chown=$UID requirements.txt .
 
-USER $UID:$UID
 RUN pip install --no-cache-dir --user -r requirements.txt
 
 COPY --chown=$UID *.py ./
