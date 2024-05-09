@@ -110,8 +110,6 @@ jobs:
           gsutil cp gs://ar-mlops-artifacts/configs/model_config.yaml configs/
         working-directory: ${{ github.workspace }}/server 
 
-
-
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
