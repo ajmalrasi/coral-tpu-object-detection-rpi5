@@ -16,7 +16,6 @@ def read_yaml():
 
     Raises:
         e: _description_
-
     Returns:
         _type_: _description_
     """
@@ -28,6 +27,7 @@ def read_yaml():
         print("Failed to read yaml file. {}".format(CONFIG_PATH))
         raise e
     return config
+
 
 config = read_yaml()
 
