@@ -105,8 +105,8 @@ jobs:
 
       - name: Copy configs 
         run: |
-          mkdir -p ${{ github.workspace }}/server/config
-          cp -r ${{ github.workspace }}/config/model_config.yaml ${{ github.workspace }}/server/config/
+          mkdir -p ${{ github.workspace }}/server/configs
+          cp -r ${{ github.workspace }}/configs/model_config.yaml ${{ github.workspace }}/server/configs/
         working-directory: ${{ github.workspace }}
 
       - name: Build and push Docker image
