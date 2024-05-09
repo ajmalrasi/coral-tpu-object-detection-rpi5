@@ -7,12 +7,12 @@ import time
 
 url = 'http://192.168.3.20:8000/predict'
 
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture("cam1.mkv")
 
 while True:
     ret, frame = cap.read()
 
-    frame = cv2.imread("bus.jpg")
+    frame = cv2.imread("/home/affine/Projects/sample_data/2015-12-10_1012.jpg")
 
     if not ret:
         print("Error reading frame from webcam")
@@ -43,9 +43,12 @@ while True:
             label = prediction["label"] 
             score = prediction["score"]
             id = prediction["id"]
-            text = f"{label} (ID: {id}) - Score: {score:.2f}"
-            cv2.putText(frame, text, (xmin, ymin - 10), cv2.FONT_HERSHEY_SIMPLEX,  0.6, (0, 255, 0), 2)
+            text = f"{label}, {score:.2f}"
+            cv2.rectangle(frame, (xmin, ymin), ( xmin + len(text) * 8, 
+                            ymin - 10) , (0, 255, 0), -1, cv2.LINE_AA)
             cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 1)
+            cv2.putText(frame, text, (xmin, ymin), cv2.FONT_HERSHEY_COMPLEX,  0.4, (0, 0, 0), 1, cv2.LINE_AA)
+            
     else:
         print(f"Error sending image: {response.status_code} - {response.text}")
     inference_time = time.perf_counter() - start
