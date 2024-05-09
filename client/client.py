@@ -27,28 +27,30 @@ while True:
         "image": jpg_as_text
     }
 
-    # try:
-    #     response = requests.post(url, json=data)
-    # except Exception as e:
-    #     raise ValueError("Network Error")
+    try:
+        response = requests.post(url, json=data)
+    except Exception as e:
+        print(e.with_traceback())
+        raise ValueError("Network Error.")
 
-    # if response.status_code == 200:
-    #     data = response.json()
-    #     for prediction in data["predictions"]:
-    #         xmin = prediction["bbox"]["xmin"]
-    #         ymin = prediction["bbox"]["ymin"]
-    #         xmax = prediction["bbox"]["xmax"]
-    #         ymax = prediction["bbox"]["ymax"]
-    #         label = prediction["label"] 
-    #         score = prediction["score"]
-    #         id = prediction["id"]
-    #         text = f"{label} (ID: {id}) - Score: {score:.2f}"
-    #         cv2.putText(frame, text, (xmin, ymin - 10), cv2.FONT_HERSHEY_SIMPLEX,  0.6, (0, 255, 0), 2)
-    #         cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 1)
-    # else:
-    #     print(f"Error sending image: {response.status_code} - {response.text}")
-    # inference_time = time.perf_counter() - start
-    # print('%.2f ms' % (inference_time * 1000))
+    if response.status_code == 200:
+        data = response.json()
+        for prediction in data["predictions"]:
+            xmin = prediction["bbox"]["xmin"]
+            ymin = prediction["bbox"]["ymin"]
+            xmax = prediction["bbox"]["xmax"]
+            ymax = prediction["bbox"]["ymax"]
+            label = prediction["label"] 
+            score = prediction["score"]
+            id = prediction["id"]
+            text = f"{label} (ID: {id}) - Score: {score:.2f}"
+            cv2.putText(frame, text, (xmin, ymin - 10), cv2.FONT_HERSHEY_SIMPLEX,  0.6, (0, 255, 0), 2)
+            cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 1)
+    else:
+        print(f"Error sending image: {response.status_code} - {response.text}")
+    inference_time = time.perf_counter() - start
+    print('%.2f ms' % (inference_time * 1000))
+
     cv2.namedWindow('Webcam', cv2.WINDOW_NORMAL)
     cv2.imshow('Webcam', frame)
 

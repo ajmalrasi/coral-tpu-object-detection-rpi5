@@ -3,3 +3,4 @@ uvicorn
 Pillow
 pycoral
 google-cloud-storage
+opencv-python
