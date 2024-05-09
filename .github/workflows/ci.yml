@@ -96,18 +96,21 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Copy files from GCP bucket
-        run: |
-          mkdir artifacts
-          gsutil cp gs://ar-mlops-artifacts/models/dev/model.tflite artifacts/
-          gsutil cp gs://ar-mlops-artifacts/labels/dev/labels.txt artifacts/
-        working-directory: ${{ github.workspace }}/server 
-
-      - name: Copy configs 
+      - name: Copy configs to workspace
         run: |
           mkdir -p ${{ github.workspace }}/server/configs
           cp -r ${{ github.workspace }}/configs/model_config.yaml ${{ github.workspace }}/server/configs/
         working-directory: ${{ github.workspace }}
+
+      - name: Copy files from GCP bucket
+        run: |
+          mkdir artifacts
+          gsutil cp gs://ar-mlops-artifacts/models/dev/yolov8n_edge_tpu_int8.tflite artifacts/
+          gsutil cp gs://ar-mlops-artifacts/labels/dev/coco_labels.txt artifacts/
+          gsutil cp gs://ar-mlops-artifacts/configs/model_config.yaml configs/
+        working-directory: ${{ github.workspace }}/server 
+
+
 
       - name: Build and push Docker image
         id: build-and-push
