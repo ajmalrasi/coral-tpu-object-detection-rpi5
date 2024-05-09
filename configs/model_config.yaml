@@ -1,6 +1,6 @@
 
 model:
-  path: artifacts/yolov8.tflite
+  path: artifacts/yolov8n_edge_tpu_int8.tflite
   type: 'YOLO'
 
 input:
@@ -11,7 +11,7 @@ input:
   tensor_id: 0
 
 output:
-  label_file_path: artifacts/yolo.txt
+  label_file_path: artifacts/coco_labels.txt
   tensor_id: [47]
   postprocessing:
     confidence_threshold: 0.6
