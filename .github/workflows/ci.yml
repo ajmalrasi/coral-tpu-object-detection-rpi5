@@ -103,6 +103,12 @@ jobs:
           gsutil cp gs://ar-mlops-artifacts/labels/dev/labels.txt artifacts/
         working-directory: ${{ github.workspace }}/server 
 
+      - name: Copy configs 
+        run: |
+          mkdir -p ${{ github.workspace }}/server/config
+          cp -r ${{ github.workspace }}/config/model_config.yaml ${{ github.workspace }}/server/config/
+        working-directory: ${{ github.workspace }}
+
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0

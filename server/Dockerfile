@@ -35,7 +35,8 @@ USER $UID:$UID
 COPY --from=build --chown=$UID /app/ /app/
 COPY --from=build --chown=$UID /home/nonroot/.local/ /home/nonroot/.local/
 COPY --chown=$UID *.py .
-COPY --chown=$UID *.py /artifacts/ ./artifacts/
+COPY --chown=$UID artifacts/ ./artifacts/
+COPY --chown=$UID configs/ ./configs/
 
 EXPOSE 8000
 CMD ["/home/nonroot/.local/bin/uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
