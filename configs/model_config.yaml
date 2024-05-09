@@ -1,10 +1,13 @@
 
 model:
-  path: artifacts/yolov8n_edge_tpu_int8.tflite
-  type: 'YOLO'
+  # path: artifacts/ssdlite_mobiledet_coco_qat_postprocess_edgetpu.tflite
+  path: artifacts/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite
+  # path: artifacts/yolov8n_edge_tpu_int8.tflite.tflite
+
+  type: 'SSD'
 
 input:
-  shape: [1, 640, 640, 3]
+  shape: [1, 320, 320, 3]
   preprocessing:
     normalization: [-128, 127] 
     dtype: uint8

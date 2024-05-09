@@ -38,9 +38,8 @@ async def process_image(data: dict = Body(...)):
 
                 interpreter.invoke()
                 inference_time = time.perf_counter() - start
-                objs = detect.get_objects(interpreter, 0.4, scale)
+                objs = detect.get_objects(interpreter, config['output']['postprocessing']["confidence_threshold"], scale)
                 print('%.2f ms' % (inference_time * 1000))
-
             elif config["model"]["type"] == "YOLO":
 
                 scaled_tensor = set_inputs(image)
