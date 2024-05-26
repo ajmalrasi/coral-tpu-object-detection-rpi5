@@ -5,11 +5,10 @@ from utils import resize_with_padding
 import time
 import numpy as np
 
-url = 'http://192.168.3.21:8000/predict'
+url = 'http://192.168.3.20:8000/predict'
 
-cap = cv2.VideoCapture("videoplayback.mp4")
+cap = cv2.VideoCapture("client/videoplayback.mp4")
 # cap = cv2.VideoCapture("cam1.mkv")
-
 
 reshape = 320
 

@@ -32,7 +32,6 @@ async def process_image(data: dict = Body(...)):
         image = Image.open(image_bytes)
         if is_raspberry_pi:
             start = time.perf_counter()
-            # Remove this
             image, scale = common.set_resized_input(interpreter, image.size, lambda size: image.resize(size, Image.LANCZOS))
             if config["model"]["type"] == "SSD":
 
