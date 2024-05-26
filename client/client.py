@@ -3,13 +3,15 @@ import requests
 import base64
 from utils import resize_with_padding
 import time
+import numpy as np
+
+url = 'http://192.168.3.21:8000/predict'
+
+cap = cv2.VideoCapture("videoplayback.mp4")
+# cap = cv2.VideoCapture("cam1.mkv")
 
 
-url = 'http://192.168.3.20:8000/predict'
-
-cap = cv2.VideoCapture("cam1.mkv")
-
-reshape = 300
+reshape = 320
 
 while True:
     ret, frame = cap.read()
@@ -23,7 +25,8 @@ while True:
 
     h, w, c = frame.shape
 
-    frame_resized = resize_with_padding(frame, desired_size=reshape)
+    # frame_resized = resize_with_padding(frame, desired_size=reshape)
+    frame_resized = cv2.resize(frame, (reshape, reshape)) 
 
     ret, buffer = cv2.imencode('.jpg', frame_resized)
     jpg_as_text = base64.b64encode(buffer).decode('utf-8')
@@ -33,7 +36,10 @@ while True:
     }
 
     try:
+        resp1 = time.perf_counter()
         response = requests.post(url, json=data)
+        resp2 = time.perf_counter() - resp1
+        # print('Resp time %.2f ms' % (resp2 * 1000))
     except Exception as e:
         print(e.with_traceback())
         raise ValueError("Network Error.")
@@ -50,11 +56,17 @@ while True:
             id = prediction["id"]
 
             xmin = int(xmin * (w / reshape))
-            orig = ((reshape / w) * h)
-            rem = (reshape - orig) // 2
-            ymin = int( (ymin - rem) * (h / orig) )
+            ymin = int(ymin * (h / reshape))
+
             xmax = int(xmax * (w / reshape))
-            ymax = int( (ymax  - rem) * (h / orig) )
+            ymax = int(ymax * (h / reshape))
+
+            # xmin = int(xmin * (w / reshape))
+            # orig = ((reshape / w) * h)
+            # rem = (reshape - orig) // 2
+            # ymin = int( (ymin - rem) * (h / orig) )
+            # xmax = int(xmax * (w / reshape))
+            # ymax = int( (ymax  - rem) * (h / orig) )
 
             text = f"{label}, {score:.2f}"
             cv2.rectangle(frame, (xmin, ymin), ( xmin + len(text) * 8, 
@@ -64,7 +76,16 @@ while True:
     else:
         print(f"Error sending image: {response.status_code} - {response.text}")
     inference_time = time.perf_counter() - start
-    print('%.2f ms' % (inference_time * 1000))
+    print('Total %.2f ms' % (inference_time * 1000) , 'Resp time %.2f ms' % (resp2 * 1000), end='\r')
+
+    overlay = frame.copy()
+    pts = np.array([[[799, 737], [929, 727], [1016, 799], [865, 810]], [[653,746],[786,737],[859,812],[705,818]]], np.int32)
+    clrs = [(0, 0, 255), (0, 255, 0)]
+    
+    for pt, clr in zip(pts, clrs):
+        cv2.fillPoly(overlay, [pt], clr)  
+
+    cv2.addWeighted(overlay, 0.3, frame, 1 - 0, 0, frame)
 
     cv2.namedWindow('Webcam', cv2.WINDOW_NORMAL)
     cv2.imshow('Webcam', frame)
