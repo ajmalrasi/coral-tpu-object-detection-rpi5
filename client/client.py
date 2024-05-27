@@ -9,7 +9,6 @@ url = 'http://192.168.3.20:8000/predict'
 
 cap = cv2.VideoCapture("client/videoplayback.mp4")
 # cap = cv2.VideoCapture("cam1.mkv")
-
 reshape = 320
 
 while True:
@@ -26,6 +25,7 @@ while True:
 
     # frame_resized = resize_with_padding(frame, desired_size=reshape)
     frame_resized = cv2.resize(frame, (reshape, reshape)) 
+
 
     ret, buffer = cv2.imencode('.jpg', frame_resized)
     jpg_as_text = base64.b64encode(buffer).decode('utf-8')
@@ -66,6 +66,7 @@ while True:
             # ymin = int( (ymin - rem) * (h / orig) )
             # xmax = int(xmax * (w / reshape))
             # ymax = int( (ymax  - rem) * (h / orig) )
+
 
             text = f"{label}, {score:.2f}"
             cv2.rectangle(frame, (xmin, ymin), ( xmin + len(text) * 8, 
