@@ -16,14 +16,24 @@ def mouse_callback(event, x, y, flags, param):
         pass
 
 
-url = 'http://192.168.4.100:8000/predict'
-# url = 'http://192.168.3.20:8000/predict'
+# url = 'http://192.168.4.100:8000/predict'
+url = 'http://192.168.3.20:8000/predict'
 
     
 # cap = cv2.VideoCapture("output_video.mp4")
 cap = cv2.VideoCapture("videoplayback.mp4")
 
+
+width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+fps = cap.get(cv2.CAP_PROP_FPS)
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+
 reshape = 320
+
+
+output_video_path = "output_video.mp4"  
+out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
 
 mot_tracker = Sort() 
 
@@ -125,11 +135,16 @@ while True:
         loaded_polygons = json.load(file)
     
     # random.shuffle(loaded_polygons)
+        
+    num_spots = len(loaded_polygons)
 
     for pt in loaded_polygons:
         polygon = Polygon(pt)
 
         cv2.fillPoly(overlay, [np.array(pt)], clrs)
+
+
+    occupied = 0
     
 
     for id, bb in zip(track_bbs_ids[:, -1:], track_bbs_ids[:, :4]):
@@ -152,6 +167,7 @@ while True:
             intersection = polygon.intersection(bounding_box)
             coverage = (intersection.area / polygon.area) * 100
             if coverage >= 20:
+                occupied+=1
                 # print("Bounding box covers at least 80% of the polygon.")
                 clrs = (0, 0, 255)
                 cv2.fillPoly(overlay, [np.array(pt)], clrs)  
@@ -163,20 +179,27 @@ while True:
     # for pt, clr in zip(pts, clrs):
     #     print(pt.shape)
     #     cv2.fillPoly(overlay, [pt], clr)  
-            
+                
+
     inference_time = time.perf_counter() - start
     print('Total %.2f ms' % (inference_time * 1000) , 'Resp time %.2f ms' % (resp2 * 1000), end='\r')
-    
 
+    
     cv2.addWeighted(overlay, 0.3, frame, 1 - 0, 0, frame)
 
     cv2.namedWindow('Webcam', cv2.WINDOW_NORMAL)
 
-    cv2.setMouseCallback("Webcam", mouse_callback, param=frame)
+    cv2.putText(frame, "Occupied {}".format(occupied), (int(100), int(100)), cv2.FONT_HERSHEY_COMPLEX,  0.8, (0, 0, 0), 2, cv2.LINE_AA)
+    cv2.putText(frame, "Free {}".format(num_spots - occupied), (int(100), int(130)), cv2.FONT_HERSHEY_COMPLEX,  0.8, (0, 0, 0), 2, cv2.LINE_AA)
+
+    # cv2.setMouseCallback("Webcam", mouse_callback, param=frame)
+
+    out.write(frame)
 
     cv2.imshow('Webcam', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
+out.release()
 cap.release()
 cv2.destroyAllWindows()
