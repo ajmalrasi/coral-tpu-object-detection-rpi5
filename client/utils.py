@@ -19,3 +19,24 @@ def resize_with_padding(img, desired_size=300):
     return cv2.copyMakeBorder(resized_img, top=pad_h, bottom=pad_h, 
                               left=pad_w, right=pad_w, 
                               borderType=cv2.BORDER_CONSTANT, value=[0, 0, 0])
+
+
+
+def remap_bbox(bbox, original_shape, reshape, use_padding):
+    h, w = original_shape
+    xmin, ymin, xmax, ymax = bbox
+
+    if use_padding:
+        orig_h = int((reshape / w) * h)
+        rem = (reshape - orig_h) // 2
+        xmin = int(xmin * (w / reshape))
+        ymin = int((ymin - rem) * (h / orig_h))
+        xmax = int(xmax * (w / reshape))
+        ymax = int((ymax - rem) * (h / orig_h))
+    else:
+        xmin = int(xmin * (w / reshape))
+        ymin = int(ymin * (h / reshape))
+        xmax = int(xmax * (w / reshape))
+        ymax = int(ymax * (h / reshape))
+
+    return xmin, ymin, xmax, ymax
