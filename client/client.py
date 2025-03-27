@@ -2,8 +2,6 @@ import cv2
 import base64
 import time
 import requests
-import os
-from datetime import datetime
 from utils import resize_with_padding, remap_bbox
 
 # --- Config ---
@@ -12,28 +10,23 @@ reshape = 320
 use_padding = False  # <-- Set this True to use resize_with_padding
 
 # --- Camera setup ---
-cap = cv2.VideoCapture(2)
+rtsp_url = "rtsp://ajmalrasi:ajmalrasi@192.168.3.175:554/stream2"
+cap = cv2.VideoCapture(rtsp_url)
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps = cap.get(cv2.CAP_PROP_FPS)
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
-os.makedirs("outputs", exist_ok=True)
-timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-default_path = os.path.join("outputs", f"output_video_{timestamp}.mp4")
-
 # --- Optional video saving (only if --save argument is used) ---
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--save', action='store_true', help="Save output video to disk")
-parser.add_argument('--video-path', default=default_path,
-                    help="Path to save the output video")
-
 args = parser.parse_args()
 
 out = None
 if args.save:
-    out = cv2.VideoWriter(args.video_path, fourcc, fps, (width, height))
+    output_video_path = "output_video.mp4"
+    out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
 
 
 while True:
@@ -85,9 +78,6 @@ while True:
     inference_time = time.perf_counter() - start
     fps_text = f"FPS: {1.0 / inference_time:.2f}"
     print(f'{fps_text} | Total {inference_time * 1000:.2f} ms | Resp {resp2 * 1000:.2f} ms', end='\r')
-
-    # Show FPS on frame
-    cv2.putText(frame, fps_text, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2, cv2.LINE_AA)
 
     cv2.namedWindow('Webcam', cv2.WINDOW_NORMAL)
     if out:
