@@ -1,6 +1,6 @@
 model:
-  path: artifacts/ssdlite_mobiledet_car_v2_edgetpu.tflite
-  # path: artifacts/ssdlite_mobiledet_coco_qat_postprocess_edgetpu.tflite
+  # path: artifacts/ssdlite_mobiledet_car_v2_edgetpu.tflite
+  path: artifacts/ssdlite_mobiledet_coco_qat_postprocess_edgetpu.tflite
   # path: artifacts/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite
   # path: artifacts/yolov8n_edge_tpu_int8.tflite.tflite
   type: 'SSD'
@@ -13,7 +13,7 @@ input:
   tensor_id: 0
 
 output:
-  label_file_path: artifacts/car_labels.txt
+  label_file_path: artifacts/coco_labels.txt
   tensor_id: [47]
   postprocessing:
     confidence_threshold: 0.5
