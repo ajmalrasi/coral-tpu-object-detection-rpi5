@@ -1,8 +1,8 @@
-numpy<2
-fastapi
-uvicorn
-Pillow
-pycoral
-google-cloud-storage
-opencv-python
-pyyaml
+numpy==1.26.4
+fastapi==0.110.0
+uvicorn==0.29.0
+Pillow==10.2.0
+pycoral==2.0.0
+google-cloud-storage==2.14.0
+opencv-python==4.9.0.80
+pyyaml==6.0.1
