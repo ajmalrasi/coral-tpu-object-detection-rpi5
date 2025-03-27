@@ -4,3 +4,4 @@ Pillow
 pycoral
 google-cloud-storage
 opencv-python
+pyyaml
