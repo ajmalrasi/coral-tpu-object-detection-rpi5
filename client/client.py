@@ -2,6 +2,8 @@ import cv2
 import base64
 import time
 import requests
+import os
+from datetime import datetime
 from utils import resize_with_padding, remap_bbox
 
 # --- Config ---
@@ -16,16 +18,22 @@ height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps = cap.get(cv2.CAP_PROP_FPS)
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
+os.makedirs("outputs", exist_ok=True)
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+default_path = os.path.join("outputs", f"output_video_{timestamp}.mp4")
+
 # --- Optional video saving (only if --save argument is used) ---
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--save', action='store_true', help="Save output video to disk")
+parser.add_argument('--video-path', default=default_path,
+                    help="Path to save the output video")
+
 args = parser.parse_args()
 
 out = None
 if args.save:
-    output_video_path = "output_video.mp4"
-    out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
+    out = cv2.VideoWriter(args.video_path, fourcc, fps, (width, height))
 
 
 while True:
