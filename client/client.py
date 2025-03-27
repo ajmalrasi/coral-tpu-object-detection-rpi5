@@ -29,7 +29,6 @@ while True:
     # frame_resized = resize_with_padding(frame, desired_size=reshape)
     frame_resized = cv2.resize(frame, (reshape, reshape))
 
-
     ret, buffer = cv2.imencode('.jpg', frame_resized)
     jpg_as_text = base64.b64encode(buffer).decode('utf-8')
 
@@ -74,10 +73,10 @@ while True:
             # ymax = int( (ymax  - rem) * (h / orig) )
 
             text = f"{label}, {score:.2f}"
-            # cv2.rectangle(frame, (xmin, ymin), ( xmin + len(text) * 8, 
-            #                 ymin - 10) , (255, 255, 255), -1, cv2.LINE_AA)
+            cv2.rectangle(frame, (xmin, ymin), ( xmin + len(text) * 8, 
+                            ymin - 10) , (255, 255, 255), -1, cv2.LINE_AA)
             cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (255, 255, 255), 1)
-            # cv2.putText(frame, text, (xmin, ymin), cv2.FONT_HERSHEY_COMPLEX,  0.4, (0, 0, 0), 1, cv2.LINE_AA)
+            cv2.putText(frame, text, (xmin, ymin), cv2.FONT_HERSHEY_COMPLEX,  0.4, (0, 0, 0), 1, cv2.LINE_AA)
     else:
         print(f"Error sending image: {response.status_code} - {response.text}")
 
@@ -85,7 +84,6 @@ while True:
     print('Total %.2f ms' % (inference_time * 1000) , 'Resp time %.2f ms' % (resp2 * 1000), end='\r')
     cv2.namedWindow('Webcam', cv2.WINDOW_NORMAL)
     out.write(frame)
-
     cv2.imshow('Webcam', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
