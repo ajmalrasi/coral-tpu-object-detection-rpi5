@@ -12,7 +12,8 @@ reshape = 320
 use_padding = False  # <-- Set this True to use resize_with_padding
 
 # --- Camera setup ---
-cap = cv2.VideoCapture(2)
+rtsp_url = "rtsp://ajmalrasi:ajmalrasi@192.168.3.175:554/stream2"
+cap = cv2.VideoCapture(rtsp_url)
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps = cap.get(cv2.CAP_PROP_FPS)
